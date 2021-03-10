@@ -1,5 +1,5 @@
 # What does this piece of code do?
-# Answer: 
+# Answer: output a number less than 51
 
 # Import libraries
 # randint allows drawing a random number, 
