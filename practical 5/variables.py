@@ -1,7 +1,7 @@
-a=251201
-b=190784
-c=100321
-d=abs(a-c)
+a=251201                                 #my birthday
+b=190784                                 #Young's birthday
+c=100321                                #today's date
+d=abs(a-c)                              #the absolute difference
 e=abs(b-c)
 if d>e:
   print('d is greater')
