@@ -1,4 +1,4 @@
-a=1
+a=1     #set the first two numbers
 b=1
 c=0
 print(a,',',b)
