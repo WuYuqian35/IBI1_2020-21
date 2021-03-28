@@ -1,0 +1,12 @@
+Question: Are there places in the World where there have not yet been more than 10 total infections (as of 31 March)? If so, where are they?
+The code start from line 46. So the code is like this:
+
+countries_date_data=covid_data.loc[covid_data['total_cases']<10,['date','location']]       #To find out countries which has total cases less than 10
+countries_date_data1=countries_date_data.loc[countries_date_data['date']=='2020-03-31','location']  #TO find the last day
+print(countries_date_data1)
+
+
+
+Result discussion:
+We aimed to find the countries has cases less than 10 on the final day. So we find the countries has cases less than 10 first. Then we filter all the names
+by provide the 'last day' demand. After this two filters we can get what we want.
