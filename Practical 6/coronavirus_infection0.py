@@ -20,8 +20,10 @@ labels='USA','India','Brazil','Russia','UK'
 explode =(0,0,0,0,0)
 #make the pie chart a complete one but not separated.
 plt.pie(sizes,explode=explode,labels=labels,autopct='%1.3f%%',shadow=True,startangle=90)
+plt.title('Coronavirus rates')
 #define the labels and other things of the chart. Autopct means the form of statistics.
 plt.axis('equal')
 #ensure that the chart is a circle.
 plt.show()
 #display the chart
+
