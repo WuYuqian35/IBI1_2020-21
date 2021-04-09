@@ -1,6 +1,6 @@
 n=84                                       #the initial number
-r=1.2                                       #the increasing rate
+r=1.2                                      #the increasing rate
 for i in range(1,6):
-  n=n*r                                    #the infected people in every round
-  
+  n=n*r+n                                    #the infected people in every round
+
 print('r rate',r,',','infection:',n)
