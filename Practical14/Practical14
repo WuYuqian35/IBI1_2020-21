@@ -1,69 +1,86 @@
-# Adapted from other students
+
+
+
+
+###############Adapted from other students###############
+
+
+
+
+
 from xml.dom.minidom import parse
 import xml.dom.minidom
 import matplotlib.pyplot as plt
 import numpy as np
+import re
 
-# input the DOMTree
-DOMTree = xml.dom.minidom.parse("go_obo.xml")
-collection = DOMTree.documentElement
-terms = collection.getElementsByTagName('term')
+DOMTree = xml.dom.minidom.parse("go_obo.xml")    # Input the file
+collection = DOMTree.documentElement                   # The main element
+terms = collection.getElementsByTagName('term')          # Input the nodelist
 
-isMacro={'DNA':{}, 'RNA':{}, 'protein':{}, 'carbohydrate':{}}
+isMacro={'DNA':{}, 'RNA':{}, 'protein':{}, 'oligosaccharide':{}}    #Store the names we find
 idMap = {}
+
+
+# Define the function to find DNA and their childNodes
 def hasMacro(cur_id, Macro):
-    # if already searched, return result directly
-    if cur_id in isMacro[Macro]:
+    if cur_id in isMacro[Macro]:                        #
       return isMacro[Macro][cur_id]
-    
-    # if cur defstr has term, store the result and return
-    defstr = idMap[cur_id].getElementsByTagName('defstr')[0].childNodes[0].nodeValue
-    if Macro in defstr:
+    defstr = idMap[cur_id].getElementsByTagName('defstr')[0].childNodes[0].nodeValue  #Find defstrs
+
+    if Macro in defstr:    # Find the term we want
         isMacro[Macro][cur_id] = True
         return True
-
-    # recursively searching its parents until one contains Macro or all is searched
-    for parent in idMap[cur_id].getElementsByTagName('is_a'):
+    for parent in idMap[cur_id].getElementsByTagName('is_a'):    #recursion, using the function repeatedly to find all childnodes
         if hasMacro(parent.childNodes[0].nodeValue, Macro):
             isMacro[Macro][cur_id] = True
             break;
-    
-    # if not found Macro in any of its parent, set the result to false
-    if not cur_id in isMacro[Macro]:
+    if not cur_id in isMacro[Macro]:             #TO deal with ones with no child
       isMacro[Macro][cur_id] = False
-
-    #return the result
     return isMacro[Macro][cur_id]
 
-# set the initial lists
+#DNAdefstr=[]
+#DNAterms=[]
+#for term in allterms:                                       #term is a node
+    #defstr=term.getElementsByTagName('defstr')[0].childNodes[0].data
+    #if 'DNA' in defstr:
+        #DNAdefstr.append(defstr)
+        #DNAterms.append(term)
+#for term in allterms:
+    #is_astr=term.getElementsByTagName('is_a')
+
+#for item in is_astr:
+    #id=item.childNodes[0].data
+    #num=re.findall(':(\d.*)$',id)
+
+#def find():
+    #for i in num:
 DNAlist = []
 RNAlist = []
 proteinlist = []
-carbolist = []
+oligolist = []
 
 for term in terms:
   idMap[term.getElementsByTagName('id')[0].childNodes[0].nodeValue] = term
 
-
-for term in terms:
+for term in terms:                                                    #Use the function to find all nodes
     if hasMacro(term.getElementsByTagName('id')[0].childNodes[0].data, 'DNA'):
         DNAlist.append(term.getElementsByTagName('id')[0].childNodes[0].data)
     if hasMacro(term.getElementsByTagName('id')[0].childNodes[0].data, 'RNA'):
         RNAlist.append(term.getElementsByTagName('id')[0].childNodes[0].data)
     if hasMacro(term.getElementsByTagName('id')[0].childNodes[0].data, 'protein'):
         proteinlist.append(term.getElementsByTagName('id')[0].childNodes[0].data)
-    if hasMacro(term.getElementsByTagName('id')[0].childNodes[0].data, 'carbohydrate'):
-        carbolist.append(term.getElementsByTagName('id')[0].childNodes[0].data)
+    if hasMacro(term.getElementsByTagName('id')[0].childNodes[0].data, 'oligosaccharide'):
+        oligolist.append(term.getElementsByTagName('id')[0].childNodes[0].data)
 
-print('DNAchildnodes: ', len(DNAlist))
-print('RNAchildnodes: ', len(RNAlist))
-print('proteinchildnodes: ', len(proteinlist))
-print('carbohydratechildnodes: ', len(carbolist))
+print('DNA child nodes: ', len(DNAlist))
+print('RNA child nodes: ', len(RNAlist))
+print('Protein child nodes: ', len(proteinlist))
+print('Oligosaccharide child nodes: ', len(oligolist))
 
-labels = ['DNA','RNA','protein','carbohydrate']
-sizes = [len(DNAlist),len(RNAlist),len(proteinlist),len(carbolist)]
-explode = (0,0,0,0.1)
-plt.pie(sizes,explode=explode,labels=labels,autopct='%1.1f%%',shadow=False,startangle=150)
-plt.title('the number of childNodes of Macromolecules')
+# The Pie chart
+labels = ['DNA','RNA','Protein','oligosaccharide']
+sizes = [len(DNAlist),len(RNAlist),len(proteinlist),len(oligolist)]
+plt.pie(sizes,explode=(0,0,0,0),labels=labels,autopct='%1.1f%%',shadow=False,startangle=150)
+plt.title('The number of childNodes of macromolecules')
 plt.show()
-
