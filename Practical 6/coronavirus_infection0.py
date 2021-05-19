@@ -13,7 +13,7 @@ print(frequency_dictionary)
 
 
 import matplotlib.pyplot as plt
-#use the Python package for 2D graohics.
+#use the Python package for 2D graphics.
 labels='USA','India','Brazil','Russia','UK'
 #labels five countries.
 
